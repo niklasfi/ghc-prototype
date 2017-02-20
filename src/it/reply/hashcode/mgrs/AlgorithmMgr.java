@@ -46,7 +46,7 @@ public class AlgorithmMgr implements Runnable {
 		sln.remainingServers.sort(compareServers);
 		
 		boolean stepSuccess = true;
-		mainLoop:while(stepSuccess){
+		mainLoop:while(stepSuccess && sln.remainingServers.size() > 0){
 			stepSuccess = false;
 
 			//we're working on currentPool
