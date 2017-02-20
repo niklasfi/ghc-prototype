@@ -50,24 +50,16 @@ public class SolutionMgr {
 	
 	
 	public void elaborate(File inputFile, File outputDir) throws Exception{
-		
 		int solNum = 0;
-		
-		
-		Problem config = new Problem(inputFile);
-		
-		AlgorithmMgr algMgr = new AlgorithmMgr(config);
+
+		AlgorithmMgr algMgr = new AlgorithmMgr(inputFile);
 		OutputMgr outMgr = new OutputMgr(outputDir);
 		
-		Solution sol = null;		
-		boolean suboptimal = false;
 		do{
-			algMgr.run();
-			if(sol != null){
-				outMgr.writeToDir(sol);
-			}
-		}while(sol != null || suboptimal);
-		
+			algMgr.run();	
+		} while(System.in.read() != 'x');
+
+		outMgr.writeToDir(algMgr.getBestSolution());
 	}//elaborate
 	
 }//Class SolutionMgr

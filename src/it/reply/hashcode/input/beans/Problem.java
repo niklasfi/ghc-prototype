@@ -1,6 +1,7 @@
 package it.reply.hashcode.input.beans;
 
 import it.reply.hashcode.*;
+import it.reply.hashcode.output.beans.Solution;
 
 import java.io.File;
 import java.io.Serializable;
@@ -18,5 +19,9 @@ public class Problem implements Serializable {
 		
 	public Problem(File input) {
 		//TODO
+	}
+	
+	public Solution emptySolution() {
+		return null;//TODO
 	}
 }//ConfigurationBean
