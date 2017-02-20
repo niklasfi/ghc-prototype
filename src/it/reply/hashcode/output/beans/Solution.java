@@ -24,9 +24,9 @@ public class Solution {
 		this.remainingServers = new ArrayList<>(problem.servers);
 
 		for(List<RowSegment> s : problem.rows){
-			Row r = new Row(problem.poolNumber);
+			Row r = new Row();
 			for(RowSegment rs : s){
-				r.segments.add(new Segment(rs.capacity, r));
+				r.segments.add(new Segment(rs.capacity, r, problem.poolNumber));
 			}
 		}
 		
