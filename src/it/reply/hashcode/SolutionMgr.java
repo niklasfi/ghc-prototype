@@ -2,11 +2,10 @@ package it.reply.hashcode;
 
 import java.io.File;
 
-import it.reply.hashcode.exceptions.StopSolutionExcetption;
 import it.reply.hashcode.input.beans.Problem;
 import it.reply.hashcode.mgrs.AlgorithmMgr;
 import it.reply.hashcode.mgrs.OutputMgr;
-import it.reply.hashcode.output.beans.SolutionBean;
+import it.reply.hashcode.output.beans.Solution;
 
 /**
  * @author d.cavassa
@@ -60,21 +59,13 @@ public class SolutionMgr {
 		AlgorithmMgr algMgr = new AlgorithmMgr(config);
 		OutputMgr outMgr = new OutputMgr(outputDir);
 		
-		SolutionBean sol = null;		
+		Solution sol = null;		
 		boolean suboptimal = false;
 		do{
-			try{
-				sol = algMgr.generateNextSolution(solNum++);
-				if(sol != null){
-					outMgr.writeToDir(sol);
-				}
-				
-			}catch(StopSolutionExcetption e){
-				//IN case of suboptimal solution
-				suboptimal = true;
-				System.out.println("Discarded Solution: " + e.getMessage());
+			algMgr.run();
+			if(sol != null){
+				outMgr.writeToDir(sol);
 			}
-
 		}while(sol != null || suboptimal);
 		
 	}//elaborate

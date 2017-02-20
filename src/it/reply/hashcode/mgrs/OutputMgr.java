@@ -6,8 +6,7 @@ import java.io.FileWriter;
 import java.text.DecimalFormat;
 import java.util.Date;
 
-import it.reply.hashcode.output.beans.CommandBean;
-import it.reply.hashcode.output.beans.SolutionBean;
+import it.reply.hashcode.output.beans.Solution;
 
 /**
  * @author d.cavassa
@@ -24,8 +23,8 @@ public class OutputMgr {
 		g_outDir = outDir;
 	}//OutputMgr
 
-	public void writeToDir(SolutionBean sol) throws Exception{
-		DecimalFormat fmt = new DecimalFormat(PATTERN);
+	public void writeToDir(Solution sol) throws Exception{
+/*		DecimalFormat fmt = new DecimalFormat(PATTERN);
 		Date currDate = new Date();
 		
 		String fileName = fmt.format(sol.getScore()) + "_" + BASE_FILE_NAME + "_"+ currDate.getTime() + ".txt";
@@ -49,7 +48,7 @@ public class OutputMgr {
 
 		
 		
-		
+		*/
 	}//writeToDir
 	
 	

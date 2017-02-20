@@ -1,38 +1,45 @@
 package it.reply.hashcode.mgrs;
 
-import it.reply.hashcode.exceptions.StopSolutionExcetption;
+import java.util.Random;
+
 import it.reply.hashcode.input.beans.Problem;
-import it.reply.hashcode.output.beans.CommandBean;
-import it.reply.hashcode.output.beans.SolutionBean;
+import it.reply.hashcode.output.beans.Solution;
 
 /**
  * @author d.cavassa
  *
  */
-public class AlgorithmMgr {
+public class AlgorithmMgr implements Runnable {
 	
 	private Problem g_inData;
 	private int optimalScore = 0;
 	private ScoreMgr g_scoreMgr = null; 
-	private final int NUM_MAX_SOLUTION = 3;
+	private final Random randomGenerator = new Random(System.currentTimeMillis());
+	
+	private Solution best = null;
 	
 	public AlgorithmMgr(Problem inData){
 		g_scoreMgr = new ScoreMgr(); 
 		g_inData = inData;
 	}
 	
-	public SolutionBean generateNextSolution(int solNum) throws StopSolutionExcetption{
+	public synchronized Random getRandom() {
+		return new Random(randomGenerator.nextInt());
+	}
+	
+	// Generates solutions
+	public void run() {
 		//TODO
 	}//generateNextSolution
 	
-	
-	private SolutionBean getSolution() throws StopSolutionExcetption{
-		//TODO
-	}//getSolution
-	
 
-	
-	
+	public synchronized void setBestSolution(Solution solution) {
+		best = solution;
+	}
+		
+	public Solution getBestSolution() {
+		return best;
+	}//getSolution
 	
 }//Class AlgorithmMgr
 
