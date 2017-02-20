@@ -8,4 +8,9 @@ public class RowSegment {
 		this.capacity = capacity;
 		this.x = x;
 	}
+	
+	@Override
+	public  String toString() {
+		return "RowSegment: "+x+" - "+capacity;
+	}
 }

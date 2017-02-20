@@ -10,4 +10,8 @@ public class Server {
 		this.capacity = capacity;
 	}
 	
+	@Override
+	public  String toString() {
+		return "Server: "+id+" - "+size + "("+capacity+")";
+	}
 }
