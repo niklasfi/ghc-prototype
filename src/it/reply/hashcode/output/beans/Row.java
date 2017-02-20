@@ -7,9 +7,11 @@ public class Row {
 	public ArrayList<Segment> segments;
 	public ArrayList<Integer> poolCapacity; //pool Capacity for pool[i] per row
 	
-	public Row() {
+	public Row(int pool) {
 		segments = new ArrayList<>();
-		poolCapacity = new ArrayList<>();
+		poolCapacity = new ArrayList<>(pool);
+		for(int i = 0; i < pool; i++)
+			poolCapacity.set(i, 0);
 	}
 	
 	public Row(final Row old) {

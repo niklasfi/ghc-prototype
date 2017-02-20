@@ -11,11 +11,11 @@ public class Segment {
 	public ArrayList<Server> server;
 	public ArrayList<Integer> pools;
 	
-	public Segment(int sizeTotal, Row row, int poolsNumber) {
+	public Segment(int sizeTotal, Row row) {
 		this.row = row;
 		this.sizeRemaining = this.sizeTotal = sizeTotal;
 		server = new ArrayList<>();
-		pools = new ArrayList<>(poolsNumber);
+		pools = new ArrayList<>();
 	}
 	
 	public Segment(final Segment old, Row row) {
