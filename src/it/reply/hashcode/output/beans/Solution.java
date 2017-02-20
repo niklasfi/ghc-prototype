@@ -12,7 +12,7 @@ import it.reply.hashcode.input.beans.Problem;
 import java.util.ArrayList;
 
 @SuppressWarnings("serial")
-public class Solution {
+public class Solution implements Serializable {
 	public final Problem problem;
 	public ArrayList<Row> rows;
 	public ArrayList<Server> remainingServers;
@@ -36,9 +36,9 @@ public class Solution {
 	public Solution(final Solution solution) {
 		this.problem = solution.problem;
 		this.rows = new ArrayList<>();
-		for(Row r : solution.rows)
-			rows.add(r);
-		remainingServers = new ArrayList<>(solution.remainingServers);
+		for (Row r : solution.rows) rows.add(r);
+		remainingServers = new ArrayList<>();
+		for (Server s : solution.remainingServers) remainingServers.add(s);
 	}
 	
 }//SectionBean

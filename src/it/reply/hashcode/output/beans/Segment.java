@@ -1,10 +1,11 @@
 package it.reply.hashcode.output.beans;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import it.reply.hashcode.Server;
 
-public class Segment {
+public class Segment implements Serializable {
 	public final int sizeTotal;
 	public final Row row;
 	public final int startingPoint;

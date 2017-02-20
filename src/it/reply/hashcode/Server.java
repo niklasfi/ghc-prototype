@@ -1,6 +1,8 @@
 package it.reply.hashcode;
 
-public class Server {
+import java.io.Serializable;
+
+public class Server implements Serializable {
 	public final int id, size, capacity;
 
 	public Server(int id, int size, int capacity) {

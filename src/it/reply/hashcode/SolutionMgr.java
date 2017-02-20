@@ -13,16 +13,16 @@ public class SolutionMgr {
 
 	public static void main(String[] args) {
 		
-		String prefix = "C:/Users/M.Queirolo/Desktop/hashcode";
+		String prefix = "C:/Users/blade/Desktop/hashcode/";
 		String input = "input/";
 		String output = "output/";
 		
 //		String file = "3e68ab86-b216-40f1-b7ad-41166b2b0ffe.in";
 //		String file = "5c765651-ed73-4180-90d5-66a43373be2f.in";
 //		String file = "70ab7a98-48c8-4bb5-a1bc-628974d27002.in";
-		String file = "92c5431d-4bfd-4dc7-8a7a-1e2ad77e9b6c.in";
+//		String file = "92c5431d-4bfd-4dc7-8a7a-1e2ad77e9b6c.in";
 //		String file = "098caacb-e39e-469b-8f91-6521567740ad.in";
-//		String file = "dcexample.in";
+		String file = "dcexample.in";
 //		String file = "inputfile.txt";
 
 		args = new String[] { prefix + input + file, prefix + output };
@@ -55,6 +55,7 @@ public class SolutionMgr {
 			new SolutionMgr().elaborate(inputFile, outputDir);
 		}catch(Exception e){
 			System.out.println("Error: " + e.getMessage());
+			e.printStackTrace();
 			System.exit(-4);
 		}
 	}//main
@@ -67,7 +68,7 @@ public class SolutionMgr {
 		
 		for(int i = 0; i < 1000; ++i){
 			algMgr.run();
-			System.out.println("i: " + i);
+//			System.out.println("i: " + i);
 		}
 
 

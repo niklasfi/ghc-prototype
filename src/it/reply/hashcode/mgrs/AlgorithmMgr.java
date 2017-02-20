@@ -7,7 +7,10 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Random;
 
+import javax.swing.plaf.synth.SynthSeparatorUI;
+
 import it.reply.hashcode.Server;
+import it.reply.hashcode.Utils;
 import it.reply.hashcode.input.beans.Problem;
 import it.reply.hashcode.output.beans.Row;
 import it.reply.hashcode.output.beans.Segment;
@@ -33,7 +36,7 @@ public class AlgorithmMgr implements Runnable {
 	}
 
 	public synchronized Random getRandom() {
-		return new Random(randomGenerator.nextInt());
+		return new Random(randomGenerator.nextInt(100));
 	}
 
 	// Generates solutions
@@ -41,7 +44,7 @@ public class AlgorithmMgr implements Runnable {
 		// TODO
 		Random r = getRandom();
 		Solution sln = destroy(r, getBestSolution(), 0.3f);
-
+		
 		// sort remaining servers
 		Comparator<Server> compareServers = (s1, s2) -> -Integer.compare(s1.capacity / s1.size, s2.capacity / s2.size);
 		sln.remainingServers.sort(compareServers);
@@ -98,11 +101,8 @@ public class AlgorithmMgr implements Runnable {
 
 		int score = g_scoreMgr.evaluate(sln);
 		if (score >= optimalScore) {
-			System.out.println(score);
-			synchronized (this) {
-				optimalScore = score;
-				best = sln;
-			}
+			optimalScore = score;
+			best = sln;
 		}
 	}// generateNextSolution
 
@@ -111,12 +111,14 @@ public class AlgorithmMgr implements Runnable {
 	}
 
 	private Solution destroy(Random r, Solution old, float percent) {
-		Solution sol = new Solution(old);
+		Solution sol = Utils.clone(old);
 		for (int n = (int) Math.ceil(percent * (sol.problem.servers.size() - sol.remainingServers.size())); n > 0; --n) {
-			Row row = sol.rows.get(r.nextInt(sol.rows.size()));
-			Segment s = row.segments.get(r.nextInt(row.segments.size()));
-				
-			if(s.server.size() != 0){
+			int x = r.nextInt(sol.rows.size());
+			Row row = sol.rows.get(x);
+			int y = r.nextInt(row.segments.size());
+			Segment s = row.segments.get(y);
+
+			if(s.server.size() != 0){				
 				sol.remainingServers.add(s.removeServer(r.nextInt(s.server.size())));
 				break;
 			}
