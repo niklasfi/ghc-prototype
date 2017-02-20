@@ -13,6 +13,8 @@ public class SolutionMgr {
 
 	public static void main(String[] args) {
 
+		args = new String[] { "C:/Users/M.Queirolo/Desktop/hashcode/input/3e68ab86-b216-40f1-b7ad-41166b2b0ffe.in", "C:/Users/M.Queirolo/Desktop/hashcode/output/" };
+		
 		if(args == null || args.length == 0){
 			System.out.println("No arguments specified");
 			System.exit(-1);

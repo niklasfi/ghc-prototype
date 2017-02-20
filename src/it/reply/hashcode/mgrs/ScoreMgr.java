@@ -27,20 +27,20 @@ public class ScoreMgr {
 	}
 	
 	private int bestOf1(Solution sln, Integer[] totalCaps){
-		int minScore = 0;
+		int minScore = Collections.max(Arrays.asList(totalCaps));
 		for(int r = 0; r < sln.rows.size(); ++r){
 			Integer[] caps = totalCaps.clone();
 			
 			for(int p = 0; p < sln.problem.poolNumber; ++p){
 				caps[p] -= sln.rows.get(r).poolCapacity.get(p);
 			}
-			minScore = Math.max(minScore, Collections.min(Arrays.asList(caps)));
+			minScore = Math.min(minScore, Collections.min(Arrays.asList(caps)));
 		}
 		return minScore;
 	}
 	
 	private int bestOf2(Solution sln, Integer[] totalCaps){
-		int minScore = 0;
+		int minScore = Collections.max(Arrays.asList(totalCaps));
 		for(int r1 = 0; r1 < sln.rows.size(); ++r1){
 			Integer[] capsr1 = totalCaps.clone();
 			
@@ -51,16 +51,43 @@ public class ScoreMgr {
 			for(int r2 = 0; r2 < r1; ++r2){
 				Integer[] capsr2 = capsr1.clone();
 				for(int p = 0; p < sln.problem.poolNumber; ++p){
-					capsr1[p] -= sln.rows.get(r2).poolCapacity.get(p);
-				}				
-				minScore = Math.max(minScore, Collections.min(Arrays.asList(capsr2)));
+					capsr2[p] -= sln.rows.get(r2).poolCapacity.get(p);
+				}	
+				minScore = Math.min(minScore, Collections.min(Arrays.asList(capsr2)));
 			}
 		}
 		return minScore;
 	}
 	
 	private int bestOf3(Solution sln, Integer[] totalCaps){
-		return 0;
+		int minScore = Collections.max(Arrays.asList(totalCaps));
+		for(int r1 = 0; r1 < sln.rows.size(); ++r1){
+			Integer[] capsr1 = totalCaps.clone();
+			
+			for(int p = 0; p < sln.problem.poolNumber; ++p){
+				capsr1[p] -= sln.rows.get(r1).poolCapacity.get(p);
+			}
+			
+			for(int r2 = 0; r2 < r1; ++r2){
+				
+				Integer[] capsr2 = capsr1.clone();
+				
+				for(int p = 0; p < sln.problem.poolNumber; ++p){
+					capsr2[p] -= sln.rows.get(r2).poolCapacity.get(p);
+				}
+				
+				for(int r3 = 0; r3 < r2; ++r3){
+					
+					Integer[] capsr3 = capsr2.clone();
+					
+					for(int p = 0; p < sln.problem.poolNumber; ++p){
+						capsr3[p] -= sln.rows.get(r3).poolCapacity.get(p);
+					}
+					minScore = Math.min(minScore, Collections.min(Arrays.asList(capsr3)));
+				}
+			}
+		}
+		return minScore;
 	}
 
 }// ScoreMgr
