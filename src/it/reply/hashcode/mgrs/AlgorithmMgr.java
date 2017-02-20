@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Random;
 
 import it.reply.hashcode.input.beans.Problem;
+import it.reply.hashcode.output.beans.Row;
 import it.reply.hashcode.output.beans.Solution;
 
 /**
@@ -40,9 +41,11 @@ public class AlgorithmMgr implements Runnable {
 	}
 		
 	
-	private Solution destroy(Solution old) {
+	private Solution destroy(Random r, Solution old, float percent) {
 		Solution sol = new Solution(old);
-		
+		for(int n = (int)(percent * sol.problem.servers.size()); n > 0; --n){
+			Row r = sol.rows.get(r.nextInt(sol.rows.size()));
+		}
 	}
 	
 	public Solution getBestSolution() {
