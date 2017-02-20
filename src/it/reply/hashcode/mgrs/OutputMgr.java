@@ -43,7 +43,7 @@ public class OutputMgr {
 				for (int iServer = 0; iServer < p.server.size(); iServer++) {
 					Server s = p.server.get(iServer);
 					if (!result.containsKey(s.id)) {
-						startingPoint += p.startingPoint;
+						//startingPoint += p.startingPoint;
 						result.put(s.id, new OutputObj(iRow, startingPoint, p.pools.get(iServer)));		
 					}
 					else continue;
