@@ -9,6 +9,7 @@ import java.util.Random;
 import it.reply.hashcode.Server;
 import it.reply.hashcode.input.beans.Problem;
 import it.reply.hashcode.output.beans.Row;
+import it.reply.hashcode.output.beans.Segment;
 import it.reply.hashcode.output.beans.Solution;
 
 /**
@@ -37,9 +38,8 @@ public class AlgorithmMgr implements Runnable {
 	// Generates solutions
 	public void run() {
 		//TODO
-		
-		Solution sln = new Solution(problem);
-		//destroy --> Marco
+		Random r = getRandom();
+		Solution sln = destroy(r, getBestSolution(), 0.3f);
 		
 		//sort remaining servers
 		Comparator<Server> compareServers = (s1, s2) -> -Integer.compare(s1.capacity / s1.size, s2.capacity / s2.size);
@@ -72,10 +72,6 @@ public class AlgorithmMgr implements Runnable {
 							row.segments.get(s1).sizeRemaining, row.segments.get(s2).sizeRemaining);
 					
 				}
-				
-
-				
-				
 			}
 		}
 	}//generateNextSolution
@@ -84,13 +80,15 @@ public class AlgorithmMgr implements Runnable {
 	public synchronized void setBestSolution(Solution solution) {
 		best = solution;
 	}
-		
 	
 	private Solution destroy(Random r, Solution old, float percent) {
 		Solution sol = new Solution(old);
 		for(int n = (int)(percent * sol.problem.servers.size()); n > 0; --n){
-			Row r = sol.rows.get(r.nextInt(sol.rows.size()));
+			Row row = sol.rows.get(r.nextInt(sol.rows.size()));
+			Segment s = row.segments.get(r.nextInt(row.segments.size()));
+			sol.remainingServers.add(s.removeServer(r.nextInt(s.server.size())));
 		}
+		return sol;
 	}
 	
 	public Solution getBestSolution() {

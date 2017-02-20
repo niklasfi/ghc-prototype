@@ -37,9 +37,10 @@ public class Segment {
 		return false;
 	}
 	
-	public void removeServer(int pos) {
+	public Server removeServer(int pos) {
 		Server r = server.remove(pos);
 		sizeRemaining = r.size;
 		row.poolCapacity.set(pos, row.poolCapacity.get(pos) - r.capacity);
+		return r;
 	}
 }
