@@ -39,8 +39,13 @@ public class AlgorithmMgr implements Runnable {
 		best = solution;
 	}
 		
+	
+	private void destroy(Solution s) {
+		
+	}
+	
 	public Solution getBestSolution() {
-		return best;
+		return new Solution(best);
 	}//getSolution
 	
 }//Class AlgorithmMgr
