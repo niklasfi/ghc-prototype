@@ -90,6 +90,7 @@ public class AlgorithmMgr implements Runnable {
 					}
 				}
 			}
+			break;
 		}
 		
 		best = sln;
