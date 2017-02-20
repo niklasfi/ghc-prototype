@@ -7,9 +7,9 @@ public class Row {
 	public ArrayList<Segment> segments;
 	public ArrayList<Integer> poolCapacity; //pool Capacity for pool[i] per row
 	
-	public Row(int pools) {
+	public Row() {
 		segments = new ArrayList<>();
-		poolCapacity = new ArrayList<>(pools);
+		poolCapacity = new ArrayList<>();
 	}
 	
 	public Row(final Row old) {
