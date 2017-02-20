@@ -49,9 +49,9 @@ public class AlgorithmMgr implements Runnable {
 		mainLoop: while (stepSuccess && sln.remainingServers.size() > 0) {
 			stepSuccess = false;
 
-			// we're working on currentPool
-			for (int currentPool = 0; currentPool < problem.poolNumber; ++currentPool) {
-				// sort rows by relevance
+			//we're working on currentPool
+			poolLoop: for(int currentPool = 0; currentPool < problem.poolNumber  && sln.remainingServers.size() > 0; ++currentPool){
+				//sort rows by relevance
 				Integer[] rows = new Integer[problem.rows.size()];
 				for (int i = 0; i < rows.length; ++i) {
 					rows[i] = i;
@@ -84,7 +84,7 @@ public class AlgorithmMgr implements Runnable {
 							if (server.size <= segment.sizeRemaining) {
 								segment.addServer(server, currentPool);
 								stepSuccess = true;
-								continue mainLoop;
+								continue poolLoop;
 							}
 						}
 					}
