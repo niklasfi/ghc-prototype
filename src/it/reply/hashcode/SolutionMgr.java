@@ -43,18 +43,16 @@ public class SolutionMgr {
 			System.out.println("Error: " + e.getMessage());
 			System.exit(-4);
 		}
-		
 	}//main
-	
-	
+
 	public void elaborate(File inputFile, File outputDir) throws Exception{
 		int solNum = 0;
 
 		AlgorithmMgr algMgr = new AlgorithmMgr(inputFile);
 		OutputMgr outMgr = new OutputMgr(outputDir);
 		
-		do{
-			algMgr.run();	
+		do {
+			algMgr.run();
 		} while(System.in.read() != 'x');
 
 		outMgr.writeToDir(algMgr.getBestSolution());
