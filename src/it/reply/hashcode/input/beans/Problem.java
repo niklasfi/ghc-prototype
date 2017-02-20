@@ -6,6 +6,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,23 +50,31 @@ public class Problem implements Serializable {
 			params = br.readLine().trim().split(" ");
 			int row = new Integer(params[0]);
 			int seg = new Integer(params[1]);
-			if (!brokenSeg.containsKey(row)) {
-				brokenSeg.put(row, new ArrayList<Integer>());
-			} else
-				brokenSeg.get(row).add(seg);
+			if (!brokenSeg.containsKey(row)) brokenSeg.put(row, new ArrayList<Integer>());
+			brokenSeg.get(row).add(seg);
 		}
 
-		for (int i = 0, j = 0; i < rowsNumber; i++) {
+		Comparator<Integer> comp = (Integer a, Integer b) -> {
+		    return a.compareTo(b);
+		};
+
+		for (Integer b : brokenSeg.keySet()) {
+			Collections.sort(brokenSeg.get(b), comp);
+			brokenSeg.get(b).add(rowCapacity+1);
+		}
+		
+		for (int c = 0, j = 0; c < rowsNumber; c++) {
 			ArrayList<RowSegment> segments = new ArrayList<RowSegment>();
 			int next;
+			int i = 0;
 			do {
-				next = rowCapacity;
-				if (brokenSeg.containsKey(i)) {
-					next = brokenSeg.get(i).get(j);
+				next = rowCapacity-i;
+				if (brokenSeg.containsKey(c) && brokenSeg.get(c).size() > j) {
+					next = brokenSeg.get(c).get(j);
 					j++;
 				}
 				if (next - i > 0)
-					segments.add(new RowSegment(next - i, i));
+					segments.add(new RowSegment(next - i -1, i));
 				i = next + 1;
 			} while (next < rowCapacity);
 			rows.add(segments);
