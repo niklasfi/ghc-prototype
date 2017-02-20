@@ -1,5 +1,6 @@
 package it.reply.hashcode.mgrs;
 
+import java.awt.print.Printable;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
@@ -91,19 +92,18 @@ public class AlgorithmMgr implements Runnable {
 					}
 				}
 			}
-			break;
 		}
 		
-		best = sln;
-/*
+//		best = sln;
+
 		int score = g_scoreMgr.evaluate(sln);
 		if (score >= optimalScore) {
+			System.out.println(score);
 			synchronized (this) {
 				optimalScore = score;
 				best = sln;
 			}
 		}
-*/
 	}// generateNextSolution
 
 	public synchronized void setBestSolution(Solution solution) {
@@ -115,7 +115,11 @@ public class AlgorithmMgr implements Runnable {
 		for (int n = (int) Math.ceil(percent * (sol.problem.servers.size() - sol.remainingServers.size())); n > 0; --n) {
 			Row row = sol.rows.get(r.nextInt(sol.rows.size()));
 			Segment s = row.segments.get(r.nextInt(row.segments.size()));
-			sol.remainingServers.add(s.removeServer(r.nextInt(s.server.size())));
+				
+			if(s.server.size() != 0){
+				sol.remainingServers.add(s.removeServer(r.nextInt(s.server.size())));
+				break;
+			}
 		}
 		return sol;
 	}

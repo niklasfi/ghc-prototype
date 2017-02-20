@@ -65,9 +65,11 @@ public class SolutionMgr {
 		AlgorithmMgr algMgr = new AlgorithmMgr(inputFile);
 		OutputMgr outMgr = new OutputMgr(outputDir, inputFile);
 		
-		//do{
-			algMgr.run();	
-		//} while(System.in.read() != 'x');
+		for(int i = 0; i < 1000; ++i){
+			algMgr.run();
+			System.out.println("i: " + i);
+		}
+
 
 		outMgr.writeToDir(algMgr.getBestSolution());
 	}//elaborate
