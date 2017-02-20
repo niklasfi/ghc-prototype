@@ -3,9 +3,8 @@ package it.reply.hashcode;
 import java.io.File;
 
 import it.reply.hashcode.exceptions.StopSolutionExcetption;
-import it.reply.hashcode.input.beans.ConfigurationBean;
+import it.reply.hashcode.input.beans.Problem;
 import it.reply.hashcode.mgrs.AlgorithmMgr;
-import it.reply.hashcode.mgrs.InputMgr;
 import it.reply.hashcode.mgrs.OutputMgr;
 import it.reply.hashcode.output.beans.SolutionBean;
 
@@ -55,9 +54,8 @@ public class SolutionMgr {
 		
 		int solNum = 0;
 		
-		InputMgr cfgMgr = new InputMgr();
 		
-		ConfigurationBean config = cfgMgr.getConfig(inputFile);
+		Problem config = new Problem(inputFile);
 		
 		AlgorithmMgr algMgr = new AlgorithmMgr(config);
 		OutputMgr outMgr = new OutputMgr(outputDir);
