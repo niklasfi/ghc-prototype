@@ -45,10 +45,8 @@ public class SolutionMgr {
 			System.out.println("Error: " + e.getMessage());
 			System.exit(-4);
 		}
-		
 	}//main
-	
-	
+
 	public void elaborate(File inputFile, File outputDir) throws Exception{
 		int solNum = 0;
 

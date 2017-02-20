@@ -110,7 +110,7 @@ public class AlgorithmMgr implements Runnable {
 
 	private Solution destroy(Random r, Solution old, float percent) {
 		Solution sol = new Solution(old);
-		for (int n = (int) (percent * (sol.problem.servers.size()-sol.remainingServers.size())); n > 0; --n) {
+		for (int n = (int) (percent * (sol.problem.servers.size() - sol.remainingServers.size())); n > 0; --n) {
 			Row row = sol.rows.get(r.nextInt(sol.rows.size()));
 			Segment s = row.segments.get(r.nextInt(row.segments.size()));
 			sol.remainingServers.add(s.removeServer(r.nextInt(s.server.size())));
