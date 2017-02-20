@@ -28,6 +28,7 @@ public class Solution {
 			for(RowSegment rs : s){
 				r.segments.add(new Segment(rs.capacity, r));
 			}
+			this.rows.add(r);
 		}
 		
 	}
