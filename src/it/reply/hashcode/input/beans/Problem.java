@@ -78,6 +78,6 @@ public class Problem implements Serializable {
 	}
 
 	public Solution emptySolution() {
-		return null;// TODO
+		return new Solution(this);// TODO
 	}
 }// ConfigurationBean
