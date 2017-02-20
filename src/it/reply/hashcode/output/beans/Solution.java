@@ -10,13 +10,14 @@ import it.reply.hashcode.input.beans.Problem;
 class RunEncodeNode {
 	public int start;
 	public int length;
-	public Server server;
-	public int pool;
+	public Server server; // null if server is unassigned
+	public int pool; // -1 for blocked slots
 }
 
 class Row{
-	public ArrayList<RunEncodeNode> slots;
-	public ArrayList<Integer> poolCapacity;
+	public ArrayList<RunEncodeNode> slotsTotal;
+	public ArrayList<RunEncodeNode> slotsFree;
+	public ArrayList<Integer> poolCapacity; //pool Capacity for pool[i] per row
 }
 
 /**
