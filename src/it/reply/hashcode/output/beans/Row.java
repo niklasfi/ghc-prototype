@@ -15,7 +15,7 @@ public class Row {
 	public Row(final Row old) {
 		segments = new ArrayList<>();
 		for(Segment s : segments) {
-			segments.add(new Segment(s));
+			segments.add(new Segment(s, row));
 		}
 		poolCapacity = new ArrayList<>(poolCapacity);
 	}

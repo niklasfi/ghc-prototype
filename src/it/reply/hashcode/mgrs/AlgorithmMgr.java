@@ -86,7 +86,8 @@ public class AlgorithmMgr implements Runnable {
 	}
 		
 	
-	private void destroy(Solution s) {
+	private Solution destroy(Solution old) {
+		Solution sol = new Solution(old);
 		
 	}
 	
