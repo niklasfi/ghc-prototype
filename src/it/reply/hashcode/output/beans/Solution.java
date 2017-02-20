@@ -26,7 +26,7 @@ public class Solution {
 		for(List<RowSegment> s : problem.rows){
 			Row r = new Row(problem.poolNumber);
 			for(RowSegment rs : s){
-				r.segments.add(new Segment(rs.capacity));
+				r.segments.add(new Segment(rs.capacity, r));
 			}
 		}
 		
