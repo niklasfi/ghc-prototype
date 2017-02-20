@@ -1,5 +1,7 @@
 package it.reply.hashcode.mgrs;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Random;
 
 import it.reply.hashcode.input.beans.Problem;
@@ -11,16 +13,16 @@ import it.reply.hashcode.output.beans.Solution;
  */
 public class AlgorithmMgr implements Runnable {
 	
-	private Problem g_inData;
+	private final Problem problem;
 	private int optimalScore = 0;
 	private ScoreMgr g_scoreMgr = null; 
 	private final Random randomGenerator = new Random(System.currentTimeMillis());
+	private Solution best;
 	
-	private Solution best = null;
-	
-	public AlgorithmMgr(Problem inData){
+	public AlgorithmMgr(File inData) throws IOException{
+		problem = new Problem(inData);
 		g_scoreMgr = new ScoreMgr(); 
-		g_inData = inData;
+		best = problem.emptySolution();
 	}
 	
 	public synchronized Random getRandom() {

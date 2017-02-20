@@ -2,6 +2,7 @@ package it.reply.hashcode.input.beans;
 
 import it.reply.hashcode.RowSegment;
 import it.reply.hashcode.Server;
+import it.reply.hashcode.output.beans.Solution;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -12,7 +13,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 /**
  * @author d.cavassa
@@ -20,14 +20,10 @@ import java.util.Map.Entry;
  */
 @SuppressWarnings("serial")
 public class Problem implements Serializable {
-	public final ArrayList<RowSegment> rows = new ArrayList<RowSegment>();
+	public final ArrayList<List<RowSegment>> rows = new ArrayList<List<RowSegment>>();
 	public final ArrayList<Server> servers = new ArrayList<Server>();
-	public final int poolNumber;
-	public final int rowCapacity;
-	public final int rowsNumber;
-	public final int unavailableSlots;
-	public final int serversNumber;
-		
+	public final Integer poolNumber;
+	
 	public Problem(File inputFile) throws IOException {
 
 		if(!inputFile.exists() || !inputFile.isFile()){
@@ -42,11 +38,11 @@ public class Problem implements Serializable {
 			int lineNum = 0;
 	
 			String params[] = br.readLine().trim().split(" ");
-			rowsNumber = new Integer(params[0]);
-			rowCapacity = new Integer(params[1]);
-			unavailableSlots = new Integer(params[2]);
+			int rowsNumber = new Integer(params[0]);
+			int rowCapacity = new Integer(params[1]);
+			int unavailableSlots = new Integer(params[2]);
 			poolNumber = new Integer(params[3]);
-			serversNumber = new Integer(params[4]);
+			int serversNumber = new Integer(params[4]);
 			
 			Map<Integer, List<Integer>> brokenSeg = new HashMap<Integer, List<Integer>>();
 			for (int i = 0; i < unavailableSlots; i++) {
@@ -60,11 +56,18 @@ public class Problem implements Serializable {
 			}
 			
 			for (int i = 0, j = 0; i < rowsNumber; i++) {
-				int x = i; 
-				if (brokenSeg.containsKey(i)) {
-					i = brokenSeg.get(i).get(j)+1;
-				}
-				rows.add(new RowSegment(rowCapacity,x));
+				ArrayList<RowSegment> segments = new ArrayList<RowSegment>();
+				int next;
+				do {
+					next = rowCapacity;
+					if (brokenSeg.containsKey(i)) {
+						next = brokenSeg.get(i).get(j);
+						j++;
+					}
+					if (next-i > 0) segments.add(new RowSegment(next-i,i));
+					i = next+1;
+				} while (next < rowCapacity);
+				rows.add(segments);
 			}
 			
 			for (int i = 0; i < serversNumber; i++) {
@@ -78,4 +81,10 @@ public class Problem implements Serializable {
 			br.close();
 		}
 	}
-}
+
+
+	
+	public Solution emptySolution() {
+		return null;//TODO
+	}
+}//ConfigurationBean
