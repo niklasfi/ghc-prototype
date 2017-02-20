@@ -7,16 +7,15 @@ import java.util.List;
 import it.reply.hashcode.Server;
 import it.reply.hashcode.input.beans.Problem;
 
-class RunEncodeNode {
-	public int start;
-	public int length;
-	public Server server; // null if server is unassigned
-	public int pool; // -1 for blocked slots
+class Segment{
+	int sizeTotal;
+	int sizeRemaining;
+	ArrayList<Server> server;
+	ArrayList<Integer> pools;
 }
 
 class Row{
-	public ArrayList<RunEncodeNode> slotsTotal;
-	public ArrayList<RunEncodeNode> slotsFree;
+	public ArrayList<Segment> segments;
 	public ArrayList<Integer> poolCapacity; //pool Capacity for pool[i] per row
 }
 
@@ -29,6 +28,4 @@ public class Solution {
 	public Problem problem;
 	public ArrayList<Row> rows;
 	public ArrayList<Server> remainingServers;
-	
-	
 }//SectionBean
