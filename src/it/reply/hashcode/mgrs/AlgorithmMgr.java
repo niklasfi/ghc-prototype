@@ -9,6 +9,7 @@ import java.util.Random;
 import it.reply.hashcode.Server;
 import it.reply.hashcode.input.beans.Problem;
 import it.reply.hashcode.output.beans.Row;
+import it.reply.hashcode.output.beans.Segment;
 import it.reply.hashcode.output.beans.Solution;
 
 /**
@@ -56,8 +57,12 @@ public class AlgorithmMgr implements Runnable {
 				for(int i = 0; i < rows.length; ++i){
 					rows[i] = i;
 				}
-				Comparator<Integer> compareRows = (r1, r2) -> Integer.compare(
-						sln.rows.get(r1).poolCapacity.get(currentPool), sln.rows.get(r2).poolCapacity.get(currentPool));
+				
+				final int currentPoolFinal = currentPool;
+	 			Comparator<Integer> compareRows = (r1, r2) -> Integer.compare(
+						sln.rows.get(r1).poolCapacity.get(currentPoolFinal), 
+						sln.rows.get(r2).poolCapacity.get(currentPoolFinal)
+				);
 				Arrays.sort(rows, compareRows);
 				for(int rowIndex = 0; rowIndex < rows.length; ++rowIndex){
 					//decide which segment to work on
@@ -70,12 +75,21 @@ public class AlgorithmMgr implements Runnable {
 					}
 					Comparator<Integer> compareSegments = (s1, s2) -> -Integer.compare(
 							row.segments.get(s1).sizeRemaining, row.segments.get(s2).sizeRemaining);
+					Arrays.sort(segments, compareSegments);
 					
+					for(int segmentIndex = 0; segmentIndex < segments.length; ++segmentIndex){
+						Segment segment = row.segments.get(segments[segmentIndex]);
+						
+						// try to find a fitting server
+						for(int serverIndex = 0; serverIndex < sln.remainingServers.size(); ++serverIndex){
+							Server server = sln.remainingServers.get(serverIndex);
+							if(server.size <= segment.sizeRemaining){
+								segment.addServer(server, currentPool);
+								stepSuccess = true;
+							}
+						}
+					}
 				}
-				
-
-				
-				
 			}
 		}
 	}//generateNextSolution
