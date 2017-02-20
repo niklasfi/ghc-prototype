@@ -91,7 +91,9 @@ public class AlgorithmMgr implements Runnable {
 				}
 			}
 		}
-
+		
+		best = sln;
+/*
 		int score = g_scoreMgr.evaluate(sln);
 		if (score >= optimalScore) {
 			synchronized (this) {
@@ -99,7 +101,7 @@ public class AlgorithmMgr implements Runnable {
 				best = sln;
 			}
 		}
-
+*/
 	}// generateNextSolution
 
 	public synchronized void setBestSolution(Solution solution) {
