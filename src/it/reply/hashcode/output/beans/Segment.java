@@ -1,13 +1,27 @@
 package it.reply.hashcode.output.beans;
 
-import it.reply.hashcode.Server;
-
 import java.util.ArrayList;
 
+import it.reply.hashcode.Server;
+
 public class Segment {
-	public int startingPoint;
-	public int sizeTotal;
+	public final int sizeTotal;
 	public int sizeRemaining;
 	public ArrayList<Server> server;
 	public ArrayList<Integer> pools;
+	
+	public Segment(int sizeTotal) {
+		this.sizeRemaining = this.sizeTotal = sizeTotal;
+		server = new ArrayList<>();
+		pools = new ArrayList<>();
+	}
+	
+	public Segment(final Segment old) {
+		sizeTotal = old.sizeTotal;
+		sizeRemaining = old.sizeRemaining;
+		server = new ArrayList<>(server);
+		pools = new ArrayList<>(pools);
+	}
+	
 }
+>>>>>>> 775b785b12cfa543a0cc96613f19ad9fd306c2d1
