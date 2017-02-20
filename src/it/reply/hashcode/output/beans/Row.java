@@ -9,9 +9,9 @@ public class Row {
 	
 	public Row(int pool) {
 		segments = new ArrayList<>();
-		poolCapacity = new ArrayList<>(pool);
+		poolCapacity = new ArrayList<>();
 		for(int i = 0; i < pool; i++)
-			poolCapacity.set(i, 0);
+			poolCapacity.add(0);
 	}
 	
 	public Row(final Row old) {

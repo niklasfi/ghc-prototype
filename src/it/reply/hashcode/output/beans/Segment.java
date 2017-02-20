@@ -7,12 +7,14 @@ import it.reply.hashcode.Server;
 public class Segment {
 	public final int sizeTotal;
 	public final Row row;
+	public final int startingPoint;
 	public int sizeRemaining;
 	public ArrayList<Server> server;
 	public ArrayList<Integer> pools;
 	
-	public Segment(int sizeTotal, Row row) {
+	public Segment(int sizeTotal, Row row, int startingPoint) {
 		this.row = row;
+		this.startingPoint = startingPoint;
 		this.sizeRemaining = this.sizeTotal = sizeTotal;
 		server = new ArrayList<>();
 		pools = new ArrayList<>();
@@ -22,6 +24,7 @@ public class Segment {
 		this.row = row;
 		sizeTotal = old.sizeTotal;
 		sizeRemaining = old.sizeRemaining;
+		this.startingPoint = old.startingPoint;
 		server = new ArrayList<>(server);
 		pools = new ArrayList<>(pools);
 	}

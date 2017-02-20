@@ -19,7 +19,7 @@ public class OutputObj {
 	}
 	@Override 
 	public String toString() {
-		if (disposed) return "X";
+		if (!disposed) return "x";
 		return row + " " + point + " " + pool;
 	}
 }

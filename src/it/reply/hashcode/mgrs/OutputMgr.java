@@ -20,18 +20,20 @@ public class OutputMgr {
 	
 	final private String PATTERN = "0000000000";
 	final private String BASE_FILE_NAME = "out";
+	final private File filename;
 	
 	private File g_outDir;
 	
-	public OutputMgr(File outDir){
+	public OutputMgr(File outDir, File filename){
 		g_outDir = outDir;
+		this.filename = filename;
 	}//OutputMgr
 
 	public void writeToDir(Solution sol) throws Exception{
 		DecimalFormat fmt = new DecimalFormat(PATTERN);
 		Date currDate = new Date();
 		
-		String fileName = BASE_FILE_NAME + "_"+ currDate.getTime() + ".out";
+		String fileName = this.filename.getName().substring(0,this.filename.getName().indexOf('.'))+".out";
 		
 		String outFile = g_outDir.getAbsolutePath() + File.separator + fileName;
 		
@@ -39,12 +41,12 @@ public class OutputMgr {
 		
 		for (int iRow = 0; iRow < sol.rows.size(); iRow++) {
 			for (Segment p : sol.rows.get(iRow).segments) {
-				int startingPoint = 0;
+				int startingPoint = p.startingPoint;
 				for (int iServer = 0; iServer < p.server.size(); iServer++) {
 					Server s = p.server.get(iServer);
 					if (!result.containsKey(s.id)) {
-						//startingPoint += p.startingPoint;
 						result.put(s.id, new OutputObj(iRow, startingPoint, p.pools.get(iServer)));		
+						startingPoint += s.size;
 					}
 					else continue;
 				}
@@ -57,8 +59,9 @@ public class OutputMgr {
 		BufferedWriter bw = null;
 		try{
 			bw = new BufferedWriter(new FileWriter(outFile));
-			for (Server s : sol.problem.servers) {
-				bw.write(result.get(s.id).toString());
+			for (int i = 0; i < sol.problem.servers.size(); i++) {
+				bw.write(result.get(sol.problem.servers.get(i).id).toString());
+				if (i+1 < sol.problem.servers.size()) bw.write("\r\n");
 			}
 		}catch(Exception e){
 			throw new Exception(e.getMessage());

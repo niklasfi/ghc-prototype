@@ -83,6 +83,7 @@ public class AlgorithmMgr implements Runnable {
 							Server server = sln.remainingServers.get(serverIndex);
 							if (server.size <= segment.sizeRemaining) {
 								segment.addServer(server, currentPool);
+								sln.remainingServers.remove(serverIndex);
 								stepSuccess = true;
 								continue poolLoop;
 							}
