@@ -46,7 +46,7 @@ public class AlgorithmMgr implements Runnable {
 		sln.remainingServers.sort(compareServers);
 		
 		boolean stepSuccess = true;
-		while(stepSuccess){
+		mainLoop:while(stepSuccess){
 			stepSuccess = false;
 
 			//we're working on currentPool
@@ -85,6 +85,7 @@ public class AlgorithmMgr implements Runnable {
 							if(server.size <= segment.sizeRemaining){
 								segment.addServer(server, currentPool);
 								stepSuccess = true;
+								continue mainLoop;
 							}
 						}
 					}
