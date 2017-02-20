@@ -18,6 +18,10 @@ public class ScoreMgr {
 	
 	private Integer[] getTotalCaps(Solution sln){
 		Integer[] result = new Integer[sln.problem.poolNumber];
+		for(int i = 0; i < result.length; ++i){
+			result[i] = 0;
+		}
+		
 		for(int i = 0; i < sln.problem.poolNumber; ++i){
 			for(int j = 0; j < sln.rows.size(); ++j){
 				result[i] += sln.rows.get(j).poolCapacity.get(i);
