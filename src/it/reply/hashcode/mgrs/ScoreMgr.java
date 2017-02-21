@@ -14,7 +14,14 @@ import it.reply.hashcode.output.beans.Solution;
 public class ScoreMgr {
 
 	public int evaluate(Solution sln){
-		int[] totalScore = {0,0,0};
+		int[] totalScore = {Integer.MAX_VALUE,Integer.MAX_VALUE,Integer.MAX_VALUE};
+		
+		for(int i = 0; i < 3; ++i){
+			if (sln.problem.rows.size() <= i + 1){
+				totalScore[i] = 0;
+			}
+		}
+		
 		for(int poolIndex = 0; poolIndex < sln.problem.poolNumber; ++poolIndex){
 			ArrayList<Integer> rowIndexArray = new ArrayList<Integer>(sln.rows.size());
 			
