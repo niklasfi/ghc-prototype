@@ -14,8 +14,31 @@ import it.reply.hashcode.output.beans.Solution;
 public class ScoreMgr {
 
 	public int evaluate(Solution sln){
-		Integer[] totalCaps = getTotalCaps(sln);
-		return 1*bestOf1(sln, totalCaps) + 3 * bestOfn(sln, 2, totalCaps) + 10 * bestOfn(sln, 3, totalCaps); 
+		int[] totalScore = {0,0,0};
+		for(int poolIndex = 0; poolIndex < sln.problem.poolNumber; ++poolIndex){
+			ArrayList<Integer> rowIndexArray = new ArrayList<Integer>(sln.rows.size());
+			
+			for(int i = 0; i < sln.rows.size(); ++i){
+				rowIndexArray.add(i);
+			}
+			
+			final int poolIndexFinal = poolIndex;			
+			Comparator<Integer> compareRows = (r1, r2) -> -Integer.compare(sln.rows.get(r1).poolCapacity.get(poolIndexFinal), sln.rows.get(r2).poolCapacity.get(poolIndexFinal));
+			rowIndexArray.sort(compareRows);
+			
+			int poolTotalCap = 0;
+			for(int i = 0; i < sln.rows.size(); ++i){
+				poolTotalCap += sln.rows.get(i).poolCapacity.get(poolIndex);
+			}
+			
+			for(int i = 0; i < 3; ++i){
+				if(sln.problem.rows.size() > i + 1){
+					totalScore[i] = Math.min(totalScore[i], poolTotalCap - maximumNSubtract(sln, i + 1, poolIndex, rowIndexArray));
+				}
+			}
+		}
+		
+		return totalScore[0] + totalScore[1] * 3 + totalScore[2] * 10; 
 	}//evaluate
 	
 	public Integer[] getTotalCaps(Solution sln){
@@ -82,13 +105,19 @@ public class ScoreMgr {
 			Comparator<Integer> compareRows = (r1, r2) -> -Integer.compare(sln.rows.get(r1).poolCapacity.get(poolIndexFinal), sln.rows.get(r2).poolCapacity.get(poolIndexFinal));
 			rowIndexArray.sort(compareRows);
 			
-			int poolScore = totalCaps[poolIndex];
-			for(int i = 0; i < n; ++i){
-				poolScore -= sln.rows.get(rowIndexArray.get(i)).poolCapacity.get(poolIndex);
-			}
-			totalScore = Math.min(totalScore, poolScore);
+			
 		}
 		return totalScore;
+	}
+	private int maximumNSubtract(Solution sln, int n, int poolIndex, ArrayList<Integer> sortedRowIndexArray){
+		if(sln.rows.size() < n) return 0;
+		
+		int subtract = 0;		
+		for(int i = 0; i < n; ++i){
+			subtract += sln.rows.get(sortedRowIndexArray.get(i)).poolCapacity.get(poolIndex);
+		}
+		return subtract;
+		
 	}
 
 }// ScoreMgr
