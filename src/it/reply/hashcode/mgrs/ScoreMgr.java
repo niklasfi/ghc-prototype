@@ -1,7 +1,9 @@
 package it.reply.hashcode.mgrs;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 
 import it.reply.hashcode.output.beans.Solution;
 
@@ -13,7 +15,7 @@ public class ScoreMgr {
 
 	public int evaluate(Solution sln){
 		Integer[] totalCaps = getTotalCaps(sln);
-		return 1*bestOf1(sln, totalCaps) + 3*bestOf2(sln, totalCaps) + 10*bestOf3(sln, totalCaps);
+		return 1*bestOf1(sln, totalCaps) + 3 * bestOfn(sln, 2, totalCaps) + 10 * bestOfn(sln, 3, totalCaps); 
 	}//evaluate
 	
 	public Integer[] getTotalCaps(Solution sln){
@@ -64,36 +66,29 @@ public class ScoreMgr {
 		return minScore;
 	}
 	
-	private int bestOf3(Solution sln, Integer[] totalCaps){
-		if(sln.rows.size() < 3) return 0;
-		int minScore = Collections.max(Arrays.asList(totalCaps));
-		for(int r1 = 0; r1 < sln.rows.size(); ++r1){
-			Integer[] capsr1 = totalCaps.clone();
+	private int bestOfn(Solution sln, int n, Integer[] totalCaps){
+		if(sln.rows.size() < n) return 0;
+		int totalScore = Collections.max(Arrays.asList(totalCaps));
+
+		for(int poolIndex = 0; poolIndex < sln.problem.poolNumber; ++poolIndex){
+			ArrayList<Integer> rowIndexArray = new ArrayList<Integer>(sln.rows.size());
 			
-			for(int p = 0; p < sln.problem.poolNumber; ++p){
-				capsr1[p] -= sln.rows.get(r1).poolCapacity.get(p);
+			for(int i = 0; i < sln.rows.size(); ++i){
+				rowIndexArray.add(i);
 			}
 			
-			for(int r2 = 0; r2 < r1; ++r2){
-				
-				Integer[] capsr2 = capsr1.clone();
-				
-				for(int p = 0; p < sln.problem.poolNumber; ++p){
-					capsr2[p] -= sln.rows.get(r2).poolCapacity.get(p);
-				}
-				
-				for(int r3 = 0; r3 < r2; ++r3){
-					
-					Integer[] capsr3 = capsr2.clone();
-					
-					for(int p = 0; p < sln.problem.poolNumber; ++p){
-						capsr3[p] -= sln.rows.get(r3).poolCapacity.get(p);
-					}
-					minScore = Math.min(minScore, Collections.min(Arrays.asList(capsr3)));
-				}
+			final int poolIndexFinal = poolIndex;
+			
+			Comparator<Integer> compareRows = (r1, r2) -> -Integer.compare(sln.rows.get(r1).poolCapacity.get(poolIndexFinal), sln.rows.get(r2).poolCapacity.get(poolIndexFinal));
+			rowIndexArray.sort(compareRows);
+			
+			int poolScore = totalCaps[poolIndex];
+			for(int i = 0; i < n; ++i){
+				poolScore -= sln.rows.get(rowIndexArray.get(i)).poolCapacity.get(poolIndex);
 			}
+			totalScore = Math.min(totalScore, poolScore);
 		}
-		return minScore;
+		return totalScore;
 	}
 
 }// ScoreMgr
