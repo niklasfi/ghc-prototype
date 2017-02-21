@@ -13,17 +13,19 @@ public class SolutionMgr {
 
 	public static void main(String[] args) throws Exception {
 		
-		String prefix = "c:/Users/n.fischer/eclipse/neon/java/hashcode/";
+		String prefix = "C:/Users/M.Queirolo/Desktop/hashcode/";
 
 		String input = "input/";
 		String output = "output/";
-		
+
+		String file = "ebcbe09d-a9e8-4c8c-ae23-761e44824c7a.in";
 //		String file = "3e68ab86-b216-40f1-b7ad-41166b2b0ffe.in";
 //		String file = "5c765651-ed73-4180-90d5-66a43373be2f.in";
 //		String file = "70ab7a98-48c8-4bb5-a1bc-628974d27002.in";
 //		String file = "92c5431d-4bfd-4dc7-8a7a-1e2ad77e9b6c.in";
 //		String file = "098caacb-e39e-469b-8f91-6521567740ad.in";
-		String file = "dcexample.in";
+//		String file = "dcexample.in";
+
 
 		args = new String[] { prefix + input + file, prefix + output };
 		
@@ -67,7 +69,7 @@ public class SolutionMgr {
 		AlgorithmMgr algMgr = new AlgorithmMgr(inputFile);
 		OutputMgr outMgr = new OutputMgr(outputDir, inputFile);
 		
-		for(int i = 0; i < 100; ++i){
+		for(int i = 0; i < 1; ++i){
 			algMgr.run();
 			//System.out.println("i: " + i);
 		}

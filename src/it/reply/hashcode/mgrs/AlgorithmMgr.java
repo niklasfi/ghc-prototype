@@ -1,14 +1,14 @@
 package it.reply.hashcode.mgrs;
 
-import java.awt.print.Printable;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
-
-import javax.swing.plaf.synth.SynthSeparatorUI;
 
 import it.reply.hashcode.Server;
 import it.reply.hashcode.Utils;
@@ -56,7 +56,7 @@ public class AlgorithmMgr implements Runnable {
 	public void run() {
 		// TODO
 		Random r = getRandom();
-		Solution sln = destroy(r, best, 0.3f);
+		Solution sln = destroy(r, best, 1f);
 		
 		int globalSegmentIndex = 0;
 		
@@ -148,21 +148,40 @@ public class AlgorithmMgr implements Runnable {
 	}// generateNextSolution
 
 	private Solution destroy(Random r, Solution old, float percent) {
-		Solution sol = new Solution(old);
-		for (int n = (int) Math.ceil(percent * (sol.problem.servers.size() - sol.remainingServers.size())); n > 0; --n) {
-			Row row;
-			Segment segment;
-			while(true){
-				row = sol.rows.get(r.nextInt(sol.rows.size()));
-				segment = row.segments.get(r.nextInt(row.segments.size()));
-				
-				if(segment.servers.size() != 0){
-					break;
+		Solution sol = Utils.clone(old);
+		List<int[]> map = new ArrayList<int[]>();
+		
+		for (int i = 0; i < sol.rows.size(); i++) {
+			for (int j = 0; j < sol.rows.get(i).segments.size(); j++) {
+				for (Server ser : sol.rows.get(i).segments.get(j).servers) {
+					map.add(new int[] { i, j, ser.id });
 				}
 			}
-			int serverIndex = r.nextInt(segment.servers.size());
-			Server server = segment.removeServer(serverIndex);
-			sol.remainingServers.add(server);
+		}
+		
+		for (int n = (int) Math.ceil(percent * (sol.problem.servers.size() - sol.remainingServers.size())); n > 0; --n) {
+
+			int[] index = map.remove(r.nextInt(map.size()));
+
+			Row row = sol.rows.get(index[0]);
+			Segment segment = row.segments.get(index[1]);
+			
+//			while(true){
+//				int rRand = r.nextInt(sol.rows.size());
+//				row = sol.rows.get(rRand);
+//				int sRand = r.nextInt(row.segments.size());
+//				segment = row.segments.get(sRand);
+//
+//				if(segment.servers.size() != 0){
+//					break;
+//				}
+//			}
+//			if (segment.servers.size() > 0) {
+//				int serverIndex = r.nextInt(segment.servers.size());
+				int serverIndex = segment.servers.indexOf(new Server(index[2], 0, 0));
+				Server server = segment.removeServer(serverIndex);
+				sol.remainingServers.add(server);
+//			}
 		}
 		return sol;
 	}
