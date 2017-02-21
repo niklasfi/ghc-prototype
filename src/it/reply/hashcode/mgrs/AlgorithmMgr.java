@@ -101,6 +101,7 @@ public class AlgorithmMgr implements Runnable {
 					int segmentIndexStart = globalSegmentIndex % row.segments.size();
 					for(int segmentIndex = segmentIndexStart; segmentIndex < row.segments.size(); ++segmentIndex){
 						Segment segment = row.segments.get(segmentIndex);
+						if (segment.sizeRemaining == 0) break;
 						
 						// try to find a fitting server
 						for (int serverIndex = 0; serverIndex < sln.remainingServers.size(); ++serverIndex) {
