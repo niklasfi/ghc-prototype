@@ -8,7 +8,10 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Random;
 
+import javax.swing.plaf.synth.SynthSeparatorUI;
+
 import it.reply.hashcode.Server;
+import it.reply.hashcode.Utils;
 import it.reply.hashcode.input.beans.Problem;
 import it.reply.hashcode.output.beans.Row;
 import it.reply.hashcode.output.beans.Segment;
@@ -46,7 +49,7 @@ public class AlgorithmMgr implements Runnable {
 	}
 
 	public synchronized Random getRandom() {
-		return new Random(randomGenerator.nextInt());
+		return new Random(randomGenerator.nextInt(100));
 	}
 
 	// Generates solutions
@@ -122,6 +125,7 @@ public class AlgorithmMgr implements Runnable {
 //		best = sln;
 
 		int score = g_scoreMgr.evaluate(sln);
+
 		if (score > optimalScore) {
 			System.out.println(score);
 			synchronized (this) {

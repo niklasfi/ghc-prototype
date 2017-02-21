@@ -12,7 +12,7 @@ import it.reply.hashcode.input.beans.Problem;
 import java.util.ArrayList;
 
 @SuppressWarnings("serial")
-public class Solution {
+public class Solution implements Serializable {
 	public final Problem problem;
 	public ArrayList<Row> rows;
 	public ArrayList<Server> remainingServers;

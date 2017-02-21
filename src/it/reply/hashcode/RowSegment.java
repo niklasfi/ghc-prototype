@@ -1,6 +1,8 @@
 package it.reply.hashcode;
 
-public class RowSegment {
+import java.io.Serializable;
+
+public class RowSegment implements Serializable {
 	public int capacity;
 	public int x;
 	public RowSegment(int capacity, int x) {
