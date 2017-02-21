@@ -66,6 +66,7 @@ public class AlgorithmMgr implements Runnable {
 		stepLoop: do {
 			stepSuccess = false;
 			
+			/*
 			ArrayList<PoolRowCapacity> poolrows= new ArrayList<PoolRowCapacity>(problem.poolNumber * problem.rows.size());
 			Integer[] totalCaps = g_scoreMgr.getTotalCaps(sln);
 			for(int pool = 0; pool < problem.poolNumber; ++pool){
@@ -75,11 +76,11 @@ public class AlgorithmMgr implements Runnable {
 			}
 			Comparator<PoolRowCapacity> comparePoolRowCapacity = (prc1, prc2) -> Integer.compare(prc1.cap, prc2.cap);
 			poolrows.sort(comparePoolRowCapacity);
-			
-			for(PoolRowCapacity prc : poolrows){
+			*/
+			//for(PoolRowCapacity prc : poolrows){
 			//we're working on currentPool
-			//for(int currentPool = 0; currentPool < problem.poolNumber  && sln.remainingServers.size() > 0; ++currentPool){
-				int currentPool = prc.pool;
+			poolLoop: for(int currentPool = 0; currentPool < problem.poolNumber  && sln.remainingServers.size() > 0; ++currentPool){
+				//int currentPool = prc.pool;
 				//sort rows by relevance
 				Integer[] rows = new Integer[problem.rows.size()];
 				for (int i = 0; i < rows.length; ++i) {
@@ -114,7 +115,7 @@ public class AlgorithmMgr implements Runnable {
 								segment.addServer(server, currentPool);
 								sln.remainingServers.remove(serverIndex);
 								stepSuccess = true;
-								continue stepLoop;
+								continue poolLoop;
 							}
 						}
 					}
