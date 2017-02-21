@@ -44,8 +44,8 @@ public class ScoreMgr {
 	}
 	
 	private int bestOf2(Solution sln, Integer[] totalCaps){
+		if(sln.rows.size() < 2) return 0;
 		int minScore = Collections.max(Arrays.asList(totalCaps));
-		boolean empty = true;
 		for(int r1 = 0; r1 < sln.rows.size(); ++r1){
 			Integer[] capsr1 = totalCaps.clone();
 			
@@ -59,15 +59,14 @@ public class ScoreMgr {
 					capsr2[p] -= sln.rows.get(r2).poolCapacity.get(p);
 				}	
 				minScore = Math.min(minScore, Collections.min(Arrays.asList(capsr2)));
-				empty = false;
 			}
 		}
-		return empty ? 0 : minScore;
+		return minScore;
 	}
 	
 	private int bestOf3(Solution sln, Integer[] totalCaps){
+		if(sln.rows.size() < 3) return 0;
 		int minScore = Collections.max(Arrays.asList(totalCaps));
-		boolean empty = true;
 		for(int r1 = 0; r1 < sln.rows.size(); ++r1){
 			Integer[] capsr1 = totalCaps.clone();
 			
@@ -91,11 +90,10 @@ public class ScoreMgr {
 						capsr3[p] -= sln.rows.get(r3).poolCapacity.get(p);
 					}
 					minScore = Math.min(minScore, Collections.min(Arrays.asList(capsr3)));
-					empty = false;
 				}
 			}
 		}
-		return empty ? 0 : minScore;
+		return minScore;
 	}
 
 }// ScoreMgr
