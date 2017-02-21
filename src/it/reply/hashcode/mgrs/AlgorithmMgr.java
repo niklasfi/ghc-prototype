@@ -57,7 +57,9 @@ public class AlgorithmMgr implements Runnable {
 		// TODO
 		Random r = getRandom();
 		Solution sln = destroy(r, best, 0.3f);
-
+		
+		int globalSegmentIndex = 0;
+		
 		// sort remaining servers
 		Comparator<Server> compareServers = (s1, s2) -> -Integer.compare(s1.capacity / s1.size, s2.capacity / s2.size);
 		sln.remainingServers.sort(compareServers);
@@ -96,18 +98,10 @@ public class AlgorithmMgr implements Runnable {
 					// decide which segment to work on
 					Row row = sln.rows.get(rows[rowIndex]);
 				
-					// sort seggments by relevance
-					Integer[] segments = new Integer[row.segments.size()];
-					for (int i = 0; i < segments.length; ++i) {
-						segments[i] = i;
-					}
-					Comparator<Integer> compareSegments = (s1, s2) -> -Integer
-							.compare(row.segments.get(s1).sizeRemaining, row.segments.get(s2).sizeRemaining);
-					Arrays.sort(segments, compareSegments);
-
-					for (int segmentIndex = 0; segmentIndex < segments.length; ++segmentIndex) {
-						Segment segment = row.segments.get(segments[segmentIndex]);
-
+					int segmentIndexStart = globalSegmentIndex % row.segments.size();
+					for(int segmentIndex = segmentIndexStart; segmentIndex < row.segments.size(); ++segmentIndex){
+						Segment segment = row.segments.get(segmentIndex);
+						
 						// try to find a fitting server
 						for (int serverIndex = 0; serverIndex < sln.remainingServers.size(); ++serverIndex) {
 							Server server = sln.remainingServers.get(serverIndex);
@@ -115,6 +109,23 @@ public class AlgorithmMgr implements Runnable {
 								segment.addServer(server, currentPool);
 								sln.remainingServers.remove(serverIndex);
 								stepSuccess = true;
+								globalSegmentIndex += segmentIndex - segmentIndexStart;
+								continue poolLoop;
+							}
+						}
+					}
+					
+					for(int segmentIndex = 0; segmentIndex < segmentIndexStart; ++segmentIndex){
+						Segment segment = row.segments.get(segmentIndex);
+						
+						// try to find a fitting server
+						for (int serverIndex = 0; serverIndex < sln.remainingServers.size(); ++serverIndex) {
+							Server server = sln.remainingServers.get(serverIndex);
+							if (server.size <= segment.sizeRemaining) {
+								segment.addServer(server, currentPool);
+								sln.remainingServers.remove(serverIndex);
+								stepSuccess = true;
+								globalSegmentIndex += segmentIndex + row.segments.size() - segmentIndexStart;
 								continue poolLoop;
 							}
 						}
