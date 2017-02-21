@@ -45,24 +45,34 @@ public class Problem implements Serializable {
 		poolNumber = new Integer(params[3]);
 		int serversNumber = new Integer(params[4]);
 
-		Map<Integer, List<Integer>> brokenSeg = new HashMap<Integer, List<Integer>>();
+		ArrayList<ArrayList<Integer>> unavailable = new ArrayList<ArrayList<Integer>>();
+		for(int i = 0; i < rowsNumber; ++i){
+			unavailable.add(new ArrayList<Integer>());
+		}
+
 		for (int i = 0; i < unavailableSlots; i++) {
 			params = br.readLine().trim().split(" ");
 			int row = new Integer(params[0]);
 			int seg = new Integer(params[1]);
-			if (!brokenSeg.containsKey(row)) brokenSeg.put(row, new ArrayList<Integer>());
-			brokenSeg.get(row).add(seg);
+			unavailable.get(row).add(seg);
 		}
 
-		Comparator<Integer> comp = (Integer a, Integer b) -> {
-		    return a.compareTo(b);
-		};
-
-		for (Integer b : brokenSeg.keySet()) {
-			Collections.sort(brokenSeg.get(b), comp);
-			brokenSeg.get(b).add(rowCapacity+1);
+		for(int row = 0; row < rowsNumber; ++row){
+			ArrayList<Integer> unavailableRow = unavailable.get(row);
+			unavailableRow.sort((i,j) -> Integer.compare(i, j));
+			unavailableRow.add(rowCapacity + 1);
+			ArrayList<RowSegment> segments = new ArrayList<RowSegment>();
+			int segmentBegin = 0;
+			
+			for(int unavailableIndex: unavailableRow){
+				if(unavailableIndex != segmentBegin){
+					segments.add(new RowSegment(unavailableIndex - segmentBegin - 1, segmentBegin));
+				}
+				segmentBegin = unavailableIndex + 1;
+			}
+			rows.add(segments);
 		}
-		
+		/*
 		for (int c = 0, j = 0; c < rowsNumber; c++) {
 			ArrayList<RowSegment> segments = new ArrayList<RowSegment>();
 			int next;
@@ -79,6 +89,7 @@ public class Problem implements Serializable {
 			} while (next < rowCapacity);
 			rows.add(segments);
 		}
+		*/
 
 		for (int i = 0; i < serversNumber; i++) {
 			params = br.readLine().trim().split(" ");

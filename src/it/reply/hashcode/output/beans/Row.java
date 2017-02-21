@@ -1,8 +1,9 @@
 package it.reply.hashcode.output.beans;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Row {
+public class Row implements Serializable {
 
 	public ArrayList<Segment> segments;
 	public ArrayList<Integer> poolCapacity; //pool Capacity for pool[i] per row
@@ -16,9 +17,9 @@ public class Row {
 	
 	public Row(final Row old) {
 		segments = new ArrayList<>();
-		for(Segment s : segments) {
+		for(Segment s : old.segments) {
 			segments.add(new Segment(s, this));
 		}
-		poolCapacity = new ArrayList<>(poolCapacity);
+		poolCapacity = new ArrayList<>(old.poolCapacity);
 	}
 }
