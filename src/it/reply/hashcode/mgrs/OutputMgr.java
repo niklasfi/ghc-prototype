@@ -42,8 +42,8 @@ public class OutputMgr {
 		for (int iRow = 0; iRow < sol.rows.size(); iRow++) {
 			for (Segment p : sol.rows.get(iRow).segments) {
 				int startingPoint = p.startingPoint;
-				for (int iServer = 0; iServer < p.server.size(); iServer++) {
-					Server s = p.server.get(iServer);
+				for (int iServer = 0; iServer < p.servers.size(); iServer++) {
+					Server s = p.servers.get(iServer);
 					if (!result.containsKey(s.id)) {
 						result.put(s.id, new OutputObj(iRow, startingPoint, p.pools.get(iServer)));		
 						startingPoint += s.size;
@@ -57,18 +57,20 @@ public class OutputMgr {
 		}
 		
 		BufferedWriter bw = null;
-		try{
+		//try{
 			bw = new BufferedWriter(new FileWriter(outFile));
 			for (int i = 0; i < sol.problem.servers.size(); i++) {
 				bw.write(result.get(sol.problem.servers.get(i).id).toString());
 				if (i+1 < sol.problem.servers.size()) bw.write("\r\n");
 			}
-		}catch(Exception e){
+		/*}catch(Exception e){
 			throw new Exception(e.getMessage());
 		}finally{
+		*/
 			bw.flush();
 			bw.close();
-		}
+		//}
+		
 	}//writeToDir
 	
 	

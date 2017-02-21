@@ -37,7 +37,7 @@ public class Solution {
 		this.problem = solution.problem;
 		this.rows = new ArrayList<>();
 		for(Row r : solution.rows)
-			rows.add(r);
+			rows.add(new Row(r));
 		remainingServers = new ArrayList<>(solution.remainingServers);
 	}
 	

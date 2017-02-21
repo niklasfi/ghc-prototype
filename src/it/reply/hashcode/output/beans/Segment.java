@@ -9,14 +9,14 @@ public class Segment {
 	public final Row row;
 	public final int startingPoint;
 	public int sizeRemaining;
-	public ArrayList<Server> server;
+	public ArrayList<Server> servers;
 	public ArrayList<Integer> pools;
 	
 	public Segment(int sizeTotal, Row row, int startingPoint) {
 		this.row = row;
 		this.startingPoint = startingPoint;
 		this.sizeRemaining = this.sizeTotal = sizeTotal;
-		server = new ArrayList<>();
+		servers = new ArrayList<>();
 		pools = new ArrayList<>();
 	}
 	
@@ -25,13 +25,13 @@ public class Segment {
 		sizeTotal = old.sizeTotal;
 		sizeRemaining = old.sizeRemaining;
 		this.startingPoint = old.startingPoint;
-		server = new ArrayList<>(server);
-		pools = new ArrayList<>(pools);
+		servers = new ArrayList<>(old.servers);
+		pools = new ArrayList<>(old.pools);
 	}
 
 	public boolean addServer(Server s, int pool) {
 		if(sizeRemaining >= s.size){
-			server.add(s);
+			servers.add(s);
 			pools.add(pool);
 			sizeRemaining -= s.size;
 			row.poolCapacity.set(pool, row.poolCapacity.get(pool) + s.capacity);
@@ -41,9 +41,11 @@ public class Segment {
 	}
 	
 	public Server removeServer(int pos) {
-		Server r = server.remove(pos);
-		sizeRemaining = r.size;
-		row.poolCapacity.set(pos, row.poolCapacity.get(pos) - r.capacity);
+		Server r = servers.get(pos);
+		sizeRemaining += r.size;
+		row.poolCapacity.set(pools.get(pos), row.poolCapacity.get(pools.get(pos)) - r.capacity);
+		servers.remove(pos);
+		pools.remove(pos);
 		return r;
 	}
 }

@@ -3,6 +3,7 @@ package it.reply.hashcode.mgrs;
 import java.awt.print.Printable;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Random;
@@ -18,13 +19,25 @@ import it.reply.hashcode.output.beans.Solution;
  *
  */
 
+class PoolRowCapacity {
+	int pool;
+	int row;
+	int cap;
+
+	public PoolRowCapacity(int pool, int row, int cap){
+		this.pool = pool;
+		this.row = row;
+		this.cap = cap;
+	}
+}
+
 public class AlgorithmMgr implements Runnable {
 
 	private final Problem problem;
 	private int optimalScore = 0;
 	private ScoreMgr g_scoreMgr = null;
 	private final Random randomGenerator = new Random(System.currentTimeMillis());
-	private Solution best;
+	public Solution best;
 
 	public AlgorithmMgr(File inData) throws IOException {
 		problem = new Problem(inData);
@@ -40,18 +53,30 @@ public class AlgorithmMgr implements Runnable {
 	public void run() {
 		// TODO
 		Random r = getRandom();
-		Solution sln = destroy(r, getBestSolution(), 0.3f);
+		Solution sln = destroy(r, best, 0.3f);
 
 		// sort remaining servers
 		Comparator<Server> compareServers = (s1, s2) -> -Integer.compare(s1.capacity / s1.size, s2.capacity / s2.size);
 		sln.remainingServers.sort(compareServers);
 
-		boolean stepSuccess = true;
-		mainLoop: while (stepSuccess && sln.remainingServers.size() > 0) {
+		boolean stepSuccess = false;
+		stepLoop: do {
 			stepSuccess = false;
-
+			
+			ArrayList<PoolRowCapacity> poolrows= new ArrayList<PoolRowCapacity>(problem.poolNumber * problem.rows.size());
+			Integer[] totalCaps = g_scoreMgr.getTotalCaps(sln);
+			for(int pool = 0; pool < problem.poolNumber; ++pool){
+				for(int row = 0; row < problem.rows.size(); ++row){
+					poolrows.add(new PoolRowCapacity(pool, row, totalCaps[pool] - sln.rows.get(row).poolCapacity.get(pool))); 
+				}
+			}
+			Comparator<PoolRowCapacity> comparePoolRowCapacity = (prc1, prc2) -> Integer.compare(prc1.cap, prc2.cap);
+			poolrows.sort(comparePoolRowCapacity);
+			
+			for(PoolRowCapacity prc : poolrows){
 			//we're working on currentPool
-			poolLoop: for(int currentPool = 0; currentPool < problem.poolNumber  && sln.remainingServers.size() > 0; ++currentPool){
+			//for(int currentPool = 0; currentPool < problem.poolNumber  && sln.remainingServers.size() > 0; ++currentPool){
+				int currentPool = prc.pool;
 				//sort rows by relevance
 				Integer[] rows = new Integer[problem.rows.size()];
 				for (int i = 0; i < rows.length; ++i) {
@@ -66,7 +91,7 @@ public class AlgorithmMgr implements Runnable {
 				for (int rowIndex = 0; rowIndex < rows.length; ++rowIndex) {
 					// decide which segment to work on
 					Row row = sln.rows.get(rows[rowIndex]);
-
+				
 					// sort seggments by relevance
 					Integer[] segments = new Integer[row.segments.size()];
 					for (int i = 0; i < segments.length; ++i) {
@@ -86,18 +111,18 @@ public class AlgorithmMgr implements Runnable {
 								segment.addServer(server, currentPool);
 								sln.remainingServers.remove(serverIndex);
 								stepSuccess = true;
-								continue poolLoop;
+								continue stepLoop;
 							}
 						}
 					}
 				}
 			}
-		}
+		} while(stepSuccess);
 		
 //		best = sln;
 
 		int score = g_scoreMgr.evaluate(sln);
-		if (score >= optimalScore) {
+		if (score > optimalScore) {
 			System.out.println(score);
 			synchronized (this) {
 				optimalScore = score;
@@ -106,26 +131,24 @@ public class AlgorithmMgr implements Runnable {
 		}
 	}// generateNextSolution
 
-	public synchronized void setBestSolution(Solution solution) {
-		best = solution;
-	}
-
 	private Solution destroy(Random r, Solution old, float percent) {
 		Solution sol = new Solution(old);
 		for (int n = (int) Math.ceil(percent * (sol.problem.servers.size() - sol.remainingServers.size())); n > 0; --n) {
-			Row row = sol.rows.get(r.nextInt(sol.rows.size()));
-			Segment s = row.segments.get(r.nextInt(row.segments.size()));
+			Row row;
+			Segment segment;
+			while(true){
+				row = sol.rows.get(r.nextInt(sol.rows.size()));
+				segment = row.segments.get(r.nextInt(row.segments.size()));
 				
-			if(s.server.size() != 0){
-				sol.remainingServers.add(s.removeServer(r.nextInt(s.server.size())));
-				break;
+				if(segment.servers.size() != 0){
+					break;
+				}
 			}
+			int serverIndex = r.nextInt(segment.servers.size());
+			Server server = segment.removeServer(serverIndex);
+			sol.remainingServers.add(server);
 		}
 		return sol;
 	}
-
-	public Solution getBestSolution() {
-		return new Solution(best);
-	}// getSolution
 
 }// Class AlgorithmMgr
